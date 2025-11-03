@@ -1,6 +1,3 @@
-// ============================================
-// DATA
-// ============================================
 const SOUND_DETECTIVE_DATA = {
   cities: [
     {
@@ -155,12 +152,7 @@ const SOUND_DETECTIVE_DATA = {
     }
   ],
   worldRestoredImg: "assets/world_restored.jpg",
-  btsItems: [
-    { video: "assets/bts1.mp4", caption: "Recording distorted instrument stems" },
-    { video: "assets/bts2.mp4", caption: "Layering soundscapes for each city" },
-    { video: "assets/bts3.mp4", caption: "Creating the glitch effects" },
-    { video: "assets/bts4.mp4", caption: "Final mixing and mastering" }
-  ],
+  btsVideo: "https://www.youtube.com/embed/YOUR_VIDEO_ID",
   creators: [
     {
       name: "Shota",
@@ -381,17 +373,10 @@ function renderWakeScreen() {
   // Clear all restored city progress
   clearProgress();
   
-  app.innerHTML = `
-    <div class="wake-screen">
-      <div class="wake-content">
-        <button class="btn-wake" id="wake-btn" aria-label="Wake up and begin the journey">
-          Wake Up
-        </button>
-        <p class="wake-hint">Best experienced with sound ON</p>
-      </div>
-      <div class="wake-whispers" id="whispers">wake up... wake up...</div>
-    </div>
-  `;
+  const template = document.getElementById('wake-screen-template');
+  const clone = template.content.cloneNode(true);
+  app.innerHTML = '';
+  app.appendChild(clone);
   
   document.getElementById('wake-btn').addEventListener('click', () => {
     unlockAudio();
@@ -406,34 +391,51 @@ function renderWakeScreen() {
 
 // Story Screen
 const storyPages = [
-  "In a world without sound, silence hangs heavy. The air is still, radios are dead, televisions mute. No one remembers melodies.",
-  "The Great Music Distortion struck without warning. Instruments decomposed into chaotic fragments, melodies scattered like dust.",
-  "The Harmony Guild—NYUAD's secret music agency—recruited you as a Sound Detective. Your mission: restore the world's greatest songs.",
-  "Identify the hidden instruments in distorted tracks. Correct answers restore harmony. Wrong ones deepen the silence.",
-  "Choose a city to restore..."
+  { text: "In a world without sound, silence hangs heavy. The air is still, radios are dead, televisions mute. No one remembers melodies.", image: "Media/scene1.png" },
+  { text: "The Great Music Distortion struck without warning. Instruments decomposed into chaotic fragments, melodies scattered like dust.", image: "Media/scene2.png" },
+  { text: "The Harmony Guild—NYUAD's secret music agency—recruited you as a Sound Detective. Your mission: restore the world's greatest songs.", image: "Media/scene3.png" },
+  { text: "Identify the hidden instruments in distorted tracks. Correct answers restore harmony. Wrong ones deepen the silence.", image: "Media/scene4.png" },
+  { text: "Choose a city to restore..." }
 ];
 
 let currentPage = 0;
 
 function renderStoryScreen() {
   const isFinalPage = currentPage === storyPages.length - 1;
+  const currentStory = storyPages[currentPage];
+  const storyText = typeof currentStory === 'string' ? currentStory : currentStory.text;
+  const storyImage = typeof currentStory === 'object' && currentStory.image ? currentStory.image : null;
   
-  app.innerHTML = `
-    <div class="story-screen">
-      <div class="story-panel">
-        <div class="story-content">
-          <p class="story-text">${storyPages[currentPage]}</p>
-          ${!isFinalPage ? `
-            <div class="story-controls">
-              ${currentPage > 0 ? '<button class="btn" id="prev-btn">Previous</button>' : ''}
-              <button class="btn" id="restart-btn">Restart</button>
-              <button class="btn btn-primary" id="next-btn">Next</button>
-            </div>
-          ` : ''}
-        </div>
-      </div>
-    </div>
-  `;
+  const template = document.getElementById('story-screen-template');
+  const clone = template.content.cloneNode(true);
+  
+  const imgEl = clone.getElementById('story-image');
+  const textEl = clone.getElementById('story-text');
+  const controlsEl = clone.getElementById('story-controls');
+  const prevBtn = clone.getElementById('prev-btn');
+  
+  textEl.textContent = storyText;
+  
+  if (storyImage) {
+    imgEl.src = storyImage;
+    imgEl.style.display = 'block';
+  } else {
+    imgEl.style.display = 'none';
+  }
+  
+  if (!isFinalPage) {
+    controlsEl.style.display = 'flex';
+    if (currentPage === 0) {
+      prevBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'inline-block';
+    }
+  } else {
+    controlsEl.style.display = 'none';
+  }
+  
+  app.innerHTML = '';
+  app.appendChild(clone);
   
   if (!isFinalPage) {
     document.getElementById('next-btn')?.addEventListener('click', () => {
@@ -474,23 +476,17 @@ function renderCitySelect() {
     `;
   }).join('');
   
-  const storyPanel = app.querySelector('.story-panel');
-  storyPanel.innerHTML = `
-    <div class="story-content">
-      <p class="story-text">${storyPages[currentPage]}</p>
-    </div>
-  `;
-  
-  const citySelectHtml = `
+  // Hide story panel and show only city selection
+  app.innerHTML = `
+    <div class="story-screen city-selection-screen">
     <div class="city-select">
       <h2>Choose Your Mission</h2>
       <div class="cities-grid">
         ${citiesHtml}
+        </div>
       </div>
     </div>
   `;
-  
-  app.querySelector('.story-screen').insertAdjacentHTML('beforeend', citySelectHtml);
   
   document.querySelectorAll('.city-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -530,41 +526,30 @@ function renderQuestion(city) {
   const question = city.questions[questionIndex];
   const progress = ((questionIndex) / city.questions.length) * 100;
   
-  app.innerHTML = `
-    <div class="quiz-screen">
-      <div class="quiz-progress">
-        <div class="quiz-progress-bar" style="width: ${progress}%"></div>
-      </div>
-      
-      <div class="quiz-question">
-        <h3>Question ${questionIndex + 1} of ${city.questions.length}</h3>
-        <p style="text-align: center; color: hsl(var(--muted-foreground)); margin-bottom: 2rem;">${question.prompt}</p>
-        
-        <div class="distortion-visual" id="distortion">
-          <div class="distortion-overlay"></div>
-          <div class="waveform">
-            <div class="waveform-bar"></div>
-            <div class="waveform-bar"></div>
-            <div class="waveform-bar"></div>
-            <div class="waveform-bar"></div>
-            <div class="waveform-bar"></div>
-          </div>
-        </div>
-        
-        <div class="quiz-options" id="options">
-          ${question.options.map((opt, i) => `
-            <button class="option-btn" data-correct="${opt.correct}" data-index="${i}">
-              ${opt.label}
-            </button>
-          `).join('')}
-        </div>
-      </div>
-    </div>
-  `;
+  const template = document.getElementById('quiz-screen-template');
+  const clone = template.content.cloneNode(true);
   
-  document.querySelectorAll('.option-btn').forEach(btn => {
+  const progressBar = clone.getElementById('quiz-progress-bar');
+  const titleEl = clone.getElementById('quiz-title');
+  const promptEl = clone.getElementById('quiz-prompt');
+  const optionsEl = clone.getElementById('options');
+  
+  progressBar.style.width = `${progress}%`;
+  titleEl.textContent = `Question ${questionIndex + 1} of ${city.questions.length}`;
+  promptEl.textContent = question.prompt;
+  
+  question.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.dataset.correct = opt.correct;
+    btn.dataset.index = i;
+    btn.textContent = opt.label;
     btn.addEventListener('click', () => handleAnswer(btn, city));
+    optionsEl.appendChild(btn);
   });
+  
+  app.innerHTML = '';
+  app.appendChild(clone);
 }
 
 function handleAnswer(btn, city) {
@@ -614,77 +599,91 @@ function renderRestoreScreen({ id: cityId }) {
   const restoredCities = getRestoredCities();
   const remainingCities = data.cities.filter(c => !restoredCities.includes(c.id) && c.id !== cityId);
   
+  const template = document.getElementById('restore-screen-template');
+  const clone = template.content.cloneNode(true);
+  
+  const screenEl = clone.querySelector('.restore-screen');
+  const titleEl = clone.getElementById('restore-title');
+  const actionsEl = clone.getElementById('restore-actions');
+  
+  screenEl.classList.add(city.id);
+  titleEl.textContent = `${city.name} Restored!`;
+  
   // Create confetti
-  const confettiHtml = Array.from({ length: 30 }, (_, i) => {
+  for (let i = 0; i < 30; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
     const left = Math.random() * 100;
     const delay = Math.random() * 3;
     const colors = ['var(--primary)', 'var(--pop-primary)', 'var(--rock-primary)', 'var(--classical-primary)'];
     const color = colors[Math.floor(Math.random() * colors.length)];
-    return `<div class="confetti" style="left: ${left}%; animation-delay: ${delay}s; background: hsl(${color});"></div>`;
-  }).join('');
+    confetti.style.left = `${left}%`;
+    confetti.style.animationDelay = `${delay}s`;
+    confetti.style.background = `hsl(${color})`;
+    screenEl.insertBefore(confetti, screenEl.firstChild);
+  }
   
-  app.innerHTML = `
-    <div class="restore-screen ${city.id}">
-      ${confettiHtml}
-      <div class="restore-content">
-        <h2>${city.name} Restored!</h2>
-        <p>Music flows through the streets once more</p>
-        
-        <div class="restore-actions">
-          ${remainingCities.length > 0 ? `
-            <h3 style="margin-bottom: 1rem;">Restore Another City</h3>
-            ${remainingCities.map(c => `
-              <button class="btn btn-primary" onclick="window.location.hash='/city/${c.id}'">${c.name}</button>
-            `).join('')}
-          ` : `
-            <button class="btn btn-primary" onclick="window.location.hash='/final'">Celebrate Victory</button>
-          `}
-        </div>
-      </div>
-    </div>
-  `;
+  if (remainingCities.length > 0) {
+    const heading = document.createElement('h3');
+    heading.textContent = 'Restore Another City';
+    heading.style.marginBottom = '1rem';
+    actionsEl.appendChild(heading);
+    
+    remainingCities.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-primary';
+      btn.textContent = c.name;
+      btn.onclick = () => { window.location.hash = `/city/${c.id}`; };
+      actionsEl.appendChild(btn);
+    });
+  } else {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary';
+    btn.textContent = 'Celebrate Victory';
+    btn.onclick = () => { window.location.hash = '/final'; };
+    actionsEl.appendChild(btn);
+  }
+  
+  app.innerHTML = '';
+  app.appendChild(clone);
   
   // Auto-play chorus (will fail gracefully if blocked)
   playAudio(city.chorusSrc, false).catch(() => {
     // If autoplay fails, add a play button
-    const actions = app.querySelector('.restore-actions');
-    actions.insertAdjacentHTML('afterbegin', `
-      <button class="btn btn-primary" id="play-chorus" style="margin-bottom: 1rem;">
-        Play Victory Chorus
-      </button>
-    `);
-    document.getElementById('play-chorus').addEventListener('click', () => {
+    const actions = document.querySelector('.restore-actions');
+    const playBtn = document.createElement('button');
+    playBtn.className = 'btn btn-primary';
+    playBtn.id = 'play-chorus';
+    playBtn.style.marginBottom = '1rem';
+    playBtn.textContent = 'Play Victory Chorus';
+    playBtn.addEventListener('click', () => {
       playAudio(city.chorusSrc, false);
-      document.getElementById('play-chorus').remove();
+      playBtn.remove();
     });
+    actions.insertBefore(playBtn, actions.firstChild);
   });
 }
 
 // Final Screen
 function renderFinalScreen() {
-  const notesHtml = Array.from({ length: 20 }, (_, i) => {
-    const notes = ['♪', '♫', '♬', '♩'];
-    const note = notes[Math.floor(Math.random() * notes.length)];
-    const left = Math.random() * 100;
-    const top = Math.random() * 100;
-    const delay = Math.random() * 5;
-    return `<div class="note" style="left: ${left}%; top: ${top}%; animation-delay: ${delay}s;">${note}</div>`;
-  }).join('');
+  const template = document.getElementById('final-screen-template');
+  const clone = template.content.cloneNode(true);
   
-  app.innerHTML = `
-    <div class="final-screen">
-      <div class="musical-notes">${notesHtml}</div>
-      <div class="final-content">
-        <h2>Harmony Restored</h2>
-        <p>The world remembers its melodies</p>
-        
-        <div class="final-actions">
-          <button class="btn btn-primary" id="restart-game">Restart Journey</button>
-          <button class="btn" onclick="window.location.hash='/story'">Replay Cities</button>
-        </div>
-      </div>
-    </div>
-  `;
+  const notesEl = clone.getElementById('musical-notes');
+    const notes = ['♪', '♫', '♬', '♩'];
+  
+  for (let i = 0; i < 20; i++) {
+    const noteEl = document.createElement('div');
+    noteEl.className = 'note';
+    noteEl.textContent = notes[Math.floor(Math.random() * notes.length)];
+    noteEl.style.left = `${Math.random() * 100}%`;
+    noteEl.style.top = `${Math.random() * 100}%`;
+    noteEl.style.animationDelay = `${Math.random() * 5}s`;
+    notesEl.appendChild(noteEl);
+  }
+  
+  app.innerHTML = '';
+  app.appendChild(clone);
   
   document.getElementById('restart-game').addEventListener('click', () => {
     clearProgress();
@@ -695,52 +694,64 @@ function renderFinalScreen() {
 
 // BTS Screen
 function renderBTSScreen() {
-  const itemsHtml = data.btsItems.map(item => `
-    <div class="bts-item">
-      <div class="bts-video">
-        <p style="padding: 2rem; text-align: center; color: hsl(var(--muted-foreground));">
-          [Behind the Scenes Video]
-        </p>
-      </div>
-      <p class="bts-caption">${item.caption}</p>
-    </div>
-  `).join('');
+  const template = document.getElementById('bts-screen-template');
+  const clone = template.content.cloneNode(true);
   
-  app.innerHTML = `
-    <div class="bts-screen">
-      <div class="container">
-        <h2>Behind the Scenes</h2>
-        <div class="bts-grid">
-          ${itemsHtml}
-        </div>
-      </div>
-    </div>
-  `;
+  const videoContainer = clone.getElementById('bts-video-container');
+  
+  // Create YouTube iframe
+  const iframe = document.createElement('iframe');
+  iframe.src = data.btsVideo;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.allowFullscreen = true;
+  iframe.className = 'bts-youtube-video';
+  
+  videoContainer.appendChild(iframe);
+  
+  app.innerHTML = '';
+  app.appendChild(clone);
 }
 
 // Creators Screen
 function renderCreatorsScreen() {
-  const creatorsHtml = data.creators.map(creator => `
-    <div class="creator-card">
-      <div class="creator-image">
-        <p style="font-size: 3rem; opacity: 0.3;">♪</p>
-      </div>
-      <h3 class="creator-name">${creator.name}</h3>
-      <p class="creator-role">${creator.role}</p>
-      <p class="creator-bio">${creator.bio}</p>
-    </div>
-  `).join('');
+  const template = document.getElementById('creators-screen-template');
+  const clone = template.content.cloneNode(true);
   
-  app.innerHTML = `
-    <div class="creators-screen">
-      <div class="container">
-        <h2>Meet Our Members</h2>
-        <div class="creators-grid">
-          ${creatorsHtml}
-        </div>
-      </div>
-    </div>
-  `;
+  const gridEl = clone.getElementById('creators-grid');
+  
+  data.creators.forEach(creator => {
+    const cardEl = document.createElement('div');
+    cardEl.className = 'creator-card';
+    
+    const imageEl = document.createElement('div');
+    imageEl.className = 'creator-image';
+    const imageIcon = document.createElement('p');
+    imageIcon.textContent = '♪';
+    imageIcon.style.fontSize = '3rem';
+    imageIcon.style.opacity = '0.3';
+    imageEl.appendChild(imageIcon);
+    
+    const nameEl = document.createElement('h3');
+    nameEl.className = 'creator-name';
+    nameEl.textContent = creator.name;
+    
+    const roleEl = document.createElement('p');
+    roleEl.className = 'creator-role';
+    roleEl.textContent = creator.role;
+    
+    const bioEl = document.createElement('p');
+    bioEl.className = 'creator-bio';
+    bioEl.textContent = creator.bio;
+    
+    cardEl.appendChild(imageEl);
+    cardEl.appendChild(nameEl);
+    cardEl.appendChild(roleEl);
+    cardEl.appendChild(bioEl);
+    gridEl.appendChild(cardEl);
+  });
+  
+  app.innerHTML = '';
+  app.appendChild(clone);
 }
 
 // Register all routes
