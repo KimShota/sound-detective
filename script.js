@@ -750,8 +750,9 @@ function getInstrumentFiles(instrumentType) {
   return instrumentFiles[instrumentType] || [];
 }
 
-//function to shuffle 
+//function to shuffle (could not add this due to the time limitation but ill do so next time!)
 function shuffleArray(array) {
+  //copy the original array 
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
