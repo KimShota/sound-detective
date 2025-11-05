@@ -2,8 +2,8 @@ const SOUND_DETECTIVE_DATA = {
   cities: [
     {
       id: "pop",
-      name: "Pop City",
-      blurb: "Vibrant synths and catchy hooks await restoration",
+      name: "Yellow City",
+      blurb: "Vibrant city has turned into a groomy, creepy city without any sounds",
       beforeImg: "assets/pop_before.jpg",
       afterImg: "assets/pop_after.jpg",
       chorusSrc: "assets/audio/pop_chorus.mp3",
@@ -11,50 +11,40 @@ const SOUND_DETECTIVE_DATA = {
       questions: [
         {
           id: "pop-q1",
-          prompt: "Which instrument carries the main hook?",
+          prompt: "Which piano plays the main chorus of Yellow?",
           clipSrc: "assets/audio/pop_q1.mp3",
           options: [
-            { label: "A) Synth Lead", correct: true },
-            { label: "B) Acoustic Guitar", correct: false },
-            { label: "C) Violin", correct: false }
+            { label: "A) Piano 1", correct: false }, 
+            { label: "B) Piano 2", correct: false },
+            { label: "C) Piano 3", correct: true } //this is the right answer
           ]
         },
         {
           id: "pop-q2",
-          prompt: "What creates the rhythmic foundation?",
+          prompt: "Which human voice sings the main chorus of Yellow?",
           clipSrc: "assets/audio/pop_q2.mp3",
           options: [
-            { label: "A) Electric Bass", correct: false },
-            { label: "B) 808 Sub Bass", correct: true },
-            { label: "C) Upright Bass", correct: false }
+            { label: "A) Voice 1", correct: false },
+            { label: "B) Voice 2", correct: false }, 
+            { label: "C) Voice 3", correct: true } //this is the right answer
           ]
         },
         {
           id: "pop-q3",
-          prompt: "Which percussion element drives the beat?",
+          prompt: "Which guitar plays the main chorus of Yellow?",
           clipSrc: "assets/audio/pop_q3.mp3",
           options: [
-            { label: "A) Live Drums", correct: false },
-            { label: "B) Hand Claps", correct: false },
-            { label: "C) Programmed Kick & Snare", correct: true }
-          ]
-        },
-        {
-          id: "pop-q4",
-          prompt: "What adds the atmospheric texture?",
-          clipSrc: "assets/audio/pop_q4.mp3",
-          options: [
-            { label: "A) Synth Pads", correct: true },
-            { label: "B) String Section", correct: false },
-            { label: "C) Choir", correct: false }
+            { label: "A) guitar 1", correct: false },
+            { label: "B) guitar 2", correct: false },
+            { label: "C) guitar 3", correct: true } //this is the right answer
           ]
         }
       ]
     },
     {
       id: "rock",
-      name: "Rock Mountain",
-      blurb: "Raw guitars and thunderous drums need your help",
+      name: "Snow Mountain",
+      blurb: "Snow has destroyed all the instruments",
       beforeImg: "assets/rock_before.jpg",
       afterImg: "assets/rock_after.jpg",
       chorusSrc: "assets/audio/rock_chorus.mp3",
@@ -62,50 +52,40 @@ const SOUND_DETECTIVE_DATA = {
       questions: [
         {
           id: "rock-q1",
-          prompt: "What instrument plays the main riff?",
+          prompt: "Which guitar plays the main chorus of Let It Go?",
           clipSrc: "assets/audio/rock_q1.mp3",
           options: [
-            { label: "A) Electric Guitar", correct: true },
-            { label: "B) Piano", correct: false },
-            { label: "C) Saxophone", correct: false }
+            { label: "A) Guitar 1", correct: false },
+            { label: "B) Guitar 2", correct: true }, //this is the right answer
+            { label: "C) Guitar 3", correct: false }
           ]
         },
         {
           id: "rock-q2",
-          prompt: "Which creates the low-end power?",
+          prompt: "Which piano plays the main chorus of Let It Go?",
           clipSrc: "assets/audio/rock_q2.mp3",
           options: [
-            { label: "A) Synthesizer", correct: false },
-            { label: "B) Bass Guitar", correct: true },
-            { label: "C) Cello", correct: false }
+            { label: "A) Piano 1", correct: false },
+            { label: "B) Piano 2", correct: true },
+            { label: "C) Piano 3", correct: false }
           ]
         },
         {
           id: "rock-q3",
-          prompt: "What drives the energy in the chorus?",
+          prompt: "Which voice sings the main chorus of Let It Go?",
           clipSrc: "assets/audio/rock_q3.mp3",
           options: [
-            { label: "A) Drum Machine", correct: false },
-            { label: "B) Tambourine", correct: false },
-            { label: "C) Live Drum Kit", correct: true }
-          ]
-        },
-        {
-          id: "rock-q4",
-          prompt: "Which adds the soaring melody in the bridge?",
-          clipSrc: "assets/audio/rock_q4.mp3",
-          options: [
-            { label: "A) Lead Guitar Solo", correct: true },
-            { label: "B) Flute", correct: false },
-            { label: "C) Keyboard", correct: false }
+            { label: "A) Voice 1", correct: false },
+            { label: "B) Voice 2", correct: true },
+            { label: "C) Voice 3", correct: false }
           ]
         }
       ]
     },
     {
       id: "classical",
-      name: "Classical Gardens",
-      blurb: "Elegant orchestrations waiting to bloom again",
+      name: "Stars Space",
+      blurb: "Dark hall has vacuumed all the instruments and destroyed them.",
       beforeImg: "assets/classical_before.jpg",
       afterImg: "assets/classical_after.jpg",
       chorusSrc: "assets/audio/classical_chorus.mp3",
@@ -113,43 +93,34 @@ const SOUND_DETECTIVE_DATA = {
       questions: [
         {
           id: "classical-q1",
-          prompt: "Which carries the main melodic theme?",
+          prompt: "Which piano plays the main chorus of Counting Stars?",
           clipSrc: "assets/audio/classical_q1.mp3",
           options: [
-            { label: "A) Electric Guitar", correct: false },
-            { label: "B) Violin Section", correct: true },
-            { label: "C) Synthesizer", correct: false }
+            { label: "A) Piano 1", correct: true },
+            { label: "B) Piano 2", correct: false },
+            { label: "C) Piano 3", correct: false }
           ]
         },
         {
           id: "classical-q2",
-          prompt: "What provides the harmonic foundation?",
+          prompt: "Which voice sings the main chorus of Counting Stars?",
           clipSrc: "assets/audio/classical_q2.mp3",
           options: [
-            { label: "A) Bass Guitar", correct: false },
-            { label: "B) Piano", correct: true },
-            { label: "C) Electronic Bass", correct: false }
+            { label: "A) Voice 1", correct: true },
+            { label: "B) Voice 2", correct: false },
+            { label: "C) Voice 3", correct: false }
           ]
         },
         {
           id: "classical-q3",
-          prompt: "Which wind instrument answers the strings?",
+          prompt: "Which guitar plays the main chorus of Counting Stars?",
           clipSrc: "assets/audio/classical_q3.mp3",
           options: [
-            { label: "A) Flute", correct: true },
-            { label: "B) Harmonica", correct: false },
-            { label: "C) Saxophone", correct: false }
+            { label: "A) Guitar 1", correct: true },
+            { label: "B) Guitar 2", correct: false },
+            { label: "C) Guitar 3", correct: false }
           ]
-        },
-        {
-          id: "classical-q4",
-          prompt: "What adds depth in the lower register?",
-          clipSrc: "assets/audio/classical_q4.mp3",
-          options: [
-            { label: "A) Electric Bass", correct: false },
-            { label: "B) Cello & Double Bass", correct: true },
-            { label: "C) Tuba", correct: false }
-          ]
+      
         }
       ]
     }
@@ -161,25 +132,25 @@ const SOUND_DETECTIVE_DATA = {
       name: "Shota",
       role: "Web Developer / Sound Recorder",
       img: "Media/shota.jpg",
-      bio: "Crafted the distorted soundscapes and restoration choruses that bring each city back to life."
+      bio: "I developed the website and recorded the sounds"
     },
     {
-      name: "Aysha",
+      name: "Ayesha",
       role: "Sound Editor",
       img: "Media/aysha.jpg",
-      bio: "Designed the narrative journey and visual aesthetic of the Sound Detective experience."
+      bio: "I edited the sounds"
     },
     {
       name: "Jennie",
       role: "Video Editor / Sound Recorder",
       img: "Media/jenni.jpg",
-      bio: "Engineered the intricate audio puzzles and ensured perfect playback across all devices."
+      bio: "I made the production video and recorded the sounds"
     },
     {
       name: "Tyler",
       role: "Document Writer / Sound Recorder",
       img: "Media/tyler.jpg",
-      bio: "Built the game architecture and implemented the interactive detection mechanics."
+      bio: "I recorded the sound and made the flowchart."
     }
   ]
 };
@@ -617,6 +588,7 @@ function renderQuizScreen({ id: cityId }) {
 }
 
 let selectedOption = null;
+let optionAudio = null; // Store audio for selected option
 
 function renderQuestion(city) {
   const questionIndex = currentQuizState.currentQuestion;
@@ -624,6 +596,12 @@ function renderQuestion(city) {
   const progress = ((questionIndex) / city.questions.length) * 100;
   
   selectedOption = null; // Reset selection
+  // Stop any playing option audio when rendering new question
+  if (optionAudio) {
+    optionAudio.pause();
+    optionAudio.currentTime = 0;
+    optionAudio = null;
+  }
   
   const template = document.getElementById('quiz-screen-template');
   const clone = template.content.cloneNode(true);
@@ -644,6 +622,20 @@ function renderQuestion(city) {
     btn.dataset.correct = opt.correct;
     btn.dataset.index = i;
     btn.textContent = opt.label;
+    
+    // Get instrument type and number from option label
+    const instrumentType = getInstrumentTypeFromLabel(opt.label);
+    const optionNumber = getOptionNumberFromLabel(opt.label);
+    
+    if (instrumentType && optionNumber !== null) {
+      const availableFiles = getInstrumentFiles(instrumentType);
+      // Assign file based on option number (1 -> index 0, 2 -> index 1, 3 -> index 2)
+      const fileIndex = optionNumber - 1;
+      if (availableFiles[fileIndex]) {
+        btn.dataset.audioPath = availableFiles[fileIndex];
+      }
+    }
+    
     btn.addEventListener('click', () => {
       selectOption(btn, city, question);
     });
@@ -660,8 +652,66 @@ function renderQuestion(city) {
   app.appendChild(clone);
 }
 
+function getInstrumentTypeFromLabel(optionLabel) {
+  // Extract instrument type from option label (e.g., "A) Piano 1" -> "piano")
+  const match = optionLabel.match(/[A-Z]\)\s*([A-Za-z]+)\s*\d+/i);
+  if (!match) {
+    return null;
+  }
+  return match[1].toLowerCase();
+}
+
+function getOptionNumberFromLabel(optionLabel) {
+  // Extract option number from option label (e.g., "A) Piano 1" -> 1)
+  const match = optionLabel.match(/[A-Z]\)\s*[A-Za-z]+\s*(\d+)/i);
+  if (!match) {
+    return null;
+  }
+  return parseInt(match[1], 10);
+}
+
+function getInstrumentFiles(instrumentType) {
+  // Map instrument type to folder and available files
+  const instrumentFiles = {
+    'piano': [
+      'Piano/cs_piano.mp3',
+      'Piano/let it go piano.mp3',
+      'Piano/yellow piano.WAV'
+    ],
+    'voice': [
+      'Voice/cs_voice.WAV',
+      'Voice/let it go voice.WAV',
+      'Voice/yellow voice.WAV'
+    ],
+    'guitar': [
+      'Guitar/cs_guitar.WAV',
+      'Guitar/let it go violin.WAV',
+      'Guitar/yellow guitar.WAV'
+    ]
+  };
+  
+  return instrumentFiles[instrumentType] || [];
+}
+
+function shuffleArray(array) {
+  // Fisher-Yates shuffle algorithm
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 function selectOption(btn, city, question) {
   unlockAudio();
+  
+  // Stop any previously playing option audio
+  if (optionAudio) {
+    optionAudio.pause();
+    optionAudio.currentTime = 0;
+    optionAudio = null;
+  }
   
   // Remove previous selection
   document.querySelectorAll('.option-btn').forEach(b => {
@@ -678,17 +728,32 @@ function selectOption(btn, city, question) {
     finalAnswerBtn.disabled = false;
   }
   
-  // Play sound for the selected option
-  // This will play when you add the audio source to question.clipSrc
-  if (question.clipSrc) {
-    playAudio(question.clipSrc, false).catch(() => {
+  // Get audio path from the button's data attribute (assigned randomly in renderQuestion)
+  const audioPath = btn.dataset.audioPath;
+  if (audioPath) {
+    optionAudio = new Audio(audioPath);
+    optionAudio.volume = 1.0;
+    optionAudio.play().catch(() => {
       // Silent fail if audio can't play
+    });
+    
+    // Clear audio reference when finished
+    optionAudio.addEventListener('ended', () => {
+      optionAudio = null;
     });
   }
 }
 
 function handleFinalAnswer(btn, city) {
   unlockAudio();
+  
+  // Stop any playing option audio when final answer is submitted
+  if (optionAudio) {
+    optionAudio.pause();
+    optionAudio.currentTime = 0;
+    optionAudio = null;
+  }
+  
   const isCorrect = btn.dataset.correct === 'true';
   const distortion = document.getElementById('distortion');
   
@@ -701,7 +766,7 @@ function handleFinalAnswer(btn, city) {
   
   if (isCorrect) {
     btn.classList.add('correct');
-    showToast('You recovered an instrument!', 'success');
+    showToast('Correct! You recovered an instrument!', 'success');
     currentQuizState.correctAnswers++;
     
     setTimeout(() => {
@@ -718,7 +783,7 @@ function handleFinalAnswer(btn, city) {
   } else {
     btn.classList.add('incorrect');
     distortion.classList.add('glitching');
-    showToast('Not quite—listen closely.', 'error');
+    showToast('Oops! Wrong Answer', 'error');
     
     setTimeout(() => {
       btn.classList.remove('incorrect');
