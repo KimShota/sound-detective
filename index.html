@@ -16,7 +16,7 @@
     />
     <meta
       property="og:description"
-      content="Restore music to a silent world in this immersive audio detective experience."
+      content="Mission is to restore all the instruments from the world where sound has disappeared."
     />
     <meta property="og:type" content="website" />
 
@@ -49,7 +49,6 @@
 
     <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Templates -->
     <template id="wake-screen-template">
       <div class="wake-screen">
         <div class="wake-content">
@@ -60,7 +59,7 @@
           >
             Wake Up
           </button>
-          <p class="wake-hint">Best experienced with sound ON</p>
+          <p class="wake-hint">Turn on your sound</p>
         </div>
         <div class="wake-whispers-container" id="whispers-container"></div>
       </div>
@@ -128,7 +127,7 @@
           <h2 id="restore-title"></h2>
           <p>Music flows through the streets once more</p>
           <div class="restore-video-container" id="restore-video-container">
-            <!-- Pop City video embedded directly -->
+            <!-- Youtube video for popcity -->
             <iframe
               id="pop-city-video"
               class="restore-youtube-video"
@@ -140,9 +139,9 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen
-              style="display: none;"
+              style="display: none"
             ></iframe>
-            <!-- Classical Gardens video embedded directly -->
+            <!-- Youtube Video for classical gardens -->
             <iframe
               id="classical-gardens-video"
               class="restore-youtube-video"
@@ -154,9 +153,9 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen
-              style="display: none;"
+              style="display: none"
             ></iframe>
-            <!-- Rock Mountain video embedded directly -->
+            <!-- Youtube video for rock mountain -->
             <iframe
               id="rock-mountain-video"
               class="restore-youtube-video"
@@ -168,7 +167,7 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen
-              style="display: none;"
+              style="display: none"
             ></iframe>
           </div>
           <div class="restore-actions" id="restore-actions"></div>
@@ -180,14 +179,14 @@
       <div class="final-screen">
         <div class="musical-notes" id="musical-notes"></div>
         <div class="final-content">
-          <h2>Harmony Restored</h2>
-          <p>The world remembers its melodies</p>
+          <h2>Music has come back to the world!</h2>
+          <p>You achieved your mission. You are a excellent sound detective.</p>
           <div class="final-actions">
             <button class="btn btn-primary" id="restart-game">
-              Restart Journey
+              Restart the journey
             </button>
             <button class="btn" onclick="window.location.hash='/story'">
-              Replay Cities
+              Retry cities
             </button>
           </div>
         </div>
@@ -212,6 +211,7 @@
       </div>
     </template>
 
+    <!-- link to script  -->
     <script src="script.js"></script>
   </body>
 </html>
