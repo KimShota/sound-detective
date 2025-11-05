@@ -53,12 +53,16 @@
     <template id="wake-screen-template">
       <div class="wake-screen">
         <div class="wake-content">
-          <button class="btn-wake" id="wake-btn" aria-label="Wake up and begin the journey">
+          <button
+            class="btn-wake"
+            id="wake-btn"
+            aria-label="Wake up and begin the journey"
+          >
             Wake Up
           </button>
           <p class="wake-hint">Best experienced with sound ON</p>
         </div>
-        <div class="wake-whispers" id="whispers">wake up... wake up...</div>
+        <div class="wake-whispers-container" id="whispers-container"></div>
       </div>
     </template>
 
@@ -66,9 +70,19 @@
       <div class="story-screen">
         <div class="story-panel">
           <div class="story-content">
-            <img src="" alt="Story scene" class="story-image" id="story-image" style="display: none;" />
+            <img
+              src=""
+              alt="Story scene"
+              class="story-image"
+              id="story-image"
+              style="display: none"
+            />
             <p class="story-text" id="story-text"></p>
-            <div class="story-controls" id="story-controls" style="display: none;">
+            <div
+              class="story-controls"
+              id="story-controls"
+              style="display: none"
+            >
               <button class="btn" id="prev-btn">Previous</button>
               <button class="btn" id="restart-btn">Restart</button>
               <button class="btn btn-primary" id="next-btn">Next</button>
@@ -84,19 +98,26 @@
           <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
         </div>
         <div class="quiz-question">
-          <h3 id="quiz-title"></h3>
-          <p id="quiz-prompt" style="text-align: center; color: hsl(var(--muted-foreground)); margin-bottom: 2rem;"></p>
-          <div class="distortion-visual" id="distortion">
-            <div class="distortion-overlay"></div>
-            <div class="waveform">
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
+          <div class="quiz-left">
+            <div class="distortion-visual" id="distortion">
+              <div class="distortion-overlay"></div>
+              <div class="waveform">
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+              </div>
             </div>
           </div>
-          <div class="quiz-options" id="options"></div>
+          <div class="quiz-right">
+            <h3 id="quiz-title"></h3>
+            <p id="quiz-prompt"></p>
+            <div class="quiz-options" id="options"></div>
+          </div>
+          <button class="btn-final-answer" id="final-answer-btn" disabled>
+            Final Answer
+          </button>
         </div>
       </div>
     </template>
@@ -106,6 +127,50 @@
         <div class="restore-content">
           <h2 id="restore-title"></h2>
           <p>Music flows through the streets once more</p>
+          <div class="restore-video-container" id="restore-video-container">
+            <!-- Pop City video embedded directly -->
+            <iframe
+              id="pop-city-video"
+              class="restore-youtube-video"
+              width="560"
+              height="315"
+              src=""
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              style="display: none;"
+            ></iframe>
+            <!-- Classical Gardens video embedded directly -->
+            <iframe
+              id="classical-gardens-video"
+              class="restore-youtube-video"
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/q7mlB-adMBc?si=fl0b_EUjnetnRlUj&autoplay=1&mute=0"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              style="display: none;"
+            ></iframe>
+            <!-- Rock Mountain video embedded directly -->
+            <iframe
+              id="rock-mountain-video"
+              class="restore-youtube-video"
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/yY3wc58yo2A?si=ZfOsql44BiU4GflI&autoplay=1&mute=0"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              style="display: none;"
+            ></iframe>
+          </div>
           <div class="restore-actions" id="restore-actions"></div>
         </div>
       </div>
@@ -118,8 +183,12 @@
           <h2>Harmony Restored</h2>
           <p>The world remembers its melodies</p>
           <div class="final-actions">
-            <button class="btn btn-primary" id="restart-game">Restart Journey</button>
-            <button class="btn" onclick="window.location.hash='/story'">Replay Cities</button>
+            <button class="btn btn-primary" id="restart-game">
+              Restart Journey
+            </button>
+            <button class="btn" onclick="window.location.hash='/story'">
+              Replay Cities
+            </button>
           </div>
         </div>
       </div>

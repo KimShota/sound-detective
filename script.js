@@ -7,6 +7,7 @@ const SOUND_DETECTIVE_DATA = {
       beforeImg: "assets/pop_before.jpg",
       afterImg: "assets/pop_after.jpg",
       chorusSrc: "assets/audio/pop_chorus.mp3",
+      restoreVideo: "https://www.youtube.com/embed/M43ndMeV7Hw",
       questions: [
         {
           id: "pop-q1",
@@ -57,6 +58,7 @@ const SOUND_DETECTIVE_DATA = {
       beforeImg: "assets/rock_before.jpg",
       afterImg: "assets/rock_after.jpg",
       chorusSrc: "assets/audio/rock_chorus.mp3",
+      restoreVideo: "https://www.youtube.com/embed/mgT0N3tMP74",
       questions: [
         {
           id: "rock-q1",
@@ -107,6 +109,7 @@ const SOUND_DETECTIVE_DATA = {
       beforeImg: "assets/classical_before.jpg",
       afterImg: "assets/classical_after.jpg",
       chorusSrc: "assets/audio/classical_chorus.mp3",
+      restoreVideo: "https://www.youtube.com/embed/4HFhJ5FP_LY",
       questions: [
         {
           id: "classical-q1",
@@ -152,30 +155,30 @@ const SOUND_DETECTIVE_DATA = {
     }
   ],
   worldRestoredImg: "assets/world_restored.jpg",
-  btsVideo: "https://www.youtube.com/embed/YOUR_VIDEO_ID",
+  btsVideo: "https://www.youtube.com/embed/yXt0CkOTBaY",
   creators: [
     {
       name: "Shota",
-      role: "Sound Design Lead",
-      img: "assets/shota.jpg",
+      role: "Web Developer / Sound Recorder",
+      img: "Media/shota.jpg",
       bio: "Crafted the distorted soundscapes and restoration choruses that bring each city back to life."
     },
     {
       name: "Aysha",
-      role: "Creative Director",
-      img: "assets/aysha.jpg",
+      role: "Sound Editor",
+      img: "Media/aysha.jpg",
       bio: "Designed the narrative journey and visual aesthetic of the Sound Detective experience."
     },
     {
       name: "Jennie",
-      role: "Audio Engineer",
-      img: "assets/jennie.jpg",
+      role: "Video Editor / Sound Recorder",
+      img: "Media/jenni.jpg",
       bio: "Engineered the intricate audio puzzles and ensured perfect playback across all devices."
     },
     {
       name: "Tyler",
-      role: "Technical Producer",
-      img: "assets/tyler.jpg",
+      role: "Document Writer / Sound Recorder",
+      img: "Media/tyler.jpg",
       bio: "Built the game architecture and implemented the interactive detection mechanics."
     }
   ]
@@ -240,7 +243,12 @@ function unlockAudio() {
   }
 }
 
-function playAudio(src, loop = false) {
+function playAudio(src, loop = false, preserveIfSame = false) {
+  // If preserveIfSame is true and the same audio is already playing, don't restart it
+  if (preserveIfSame && currentAudio && currentAudio.src.includes(src)) {
+    return Promise.resolve(currentAudio);
+  }
+  
   stopAudio();
   unlockAudio();
   
@@ -373,6 +381,11 @@ function renderWakeScreen() {
   // Clear all restored city progress
   clearProgress();
   
+  // Play scary creepy audio on intro screen
+  playAudio('Media/scary-creepy-horror-music-430823.mp3', true).catch(() => {
+    // Silent fail if audio can't play (autoplay blocked)
+  });
+  
   const template = document.getElementById('wake-screen-template');
   const clone = template.content.cloneNode(true);
   app.innerHTML = '';
@@ -380,8 +393,41 @@ function renderWakeScreen() {
   
   document.getElementById('wake-btn').addEventListener('click', () => {
     unlockAudio();
-    const whispers = document.getElementById('whispers');
-    whispers.classList.add('active');
+    
+    // Stop scary creepy music and play ghost whisper audio
+    stopAudio();
+    playAudio('Media/ghost-whispers-6030.mp3', false).catch(() => {
+      // Silent fail if audio can't play
+    });
+    
+    const container = document.getElementById('whispers-container');
+    
+    //show wake up text 8 times in random positions 
+    const whisperCount = 8;
+    const whisperTexts = ['wake up...', 'wake up', 'wake up...', 'wake up', 'wake up...', 'wake up'];
+    
+    //make wake up text appear in random positions
+    for (let i = 0; i < whisperCount; i++) {
+      const whisper = document.createElement('div');
+      whisper.className = 'wake-whispers';
+      whisper.textContent = whisperTexts[i % whisperTexts.length];
+      
+      const left = Math.random() * 85 + 5; // 5% to 90%
+      const top = Math.random() * 85 + 5; // 5% to 90%
+      
+      whisper.style.left = `${left}%`;
+      whisper.style.top = `${top}%`;
+      
+      container.appendChild(whisper);
+    }
+    
+    // Add active class gradually to each whisper
+    const whispers = container.querySelectorAll('.wake-whispers');
+    whispers.forEach((whisper, index) => {
+      setTimeout(() => {
+        whisper.classList.add('active');
+      }, index * 200); // 200ms delay between each whisper
+    });
     
     setTimeout(() => {
       navigate('/story');
@@ -391,20 +437,32 @@ function renderWakeScreen() {
 
 // Story Screen
 const storyPages = [
-  { text: "In a world without sound, silence hangs heavy. The air is still, radios are dead, televisions mute. No one remembers melodies.", image: "Media/scene1.png" },
-  { text: "The Great Music Distortion struck without warning. Instruments decomposed into chaotic fragments, melodies scattered like dust.", image: "Media/scene2.png" },
-  { text: "The Harmony Guild—NYUAD's secret music agency—recruited you as a Sound Detective. Your mission: restore the world's greatest songs.", image: "Media/scene3.png" },
-  { text: "Identify the hidden instruments in distorted tracks. Correct answers restore harmony. Wrong ones deepen the silence.", image: "Media/scene4.png" },
+  { text: "You woke up in a world without sound. The air is still. Radios and TVs are dead. No one remembers what each instrument sounded like.", image: "Media/scene1.png", narrator: "Media/narrator1.mp3" },
+  { text: "This is due to a global phenomenon, Great Music Distortion. It decomposed all the instruments into chaotic fragments and all the melodies are now scattered like dust.", image: "Media/scene2.png", narrator: "Media/narrator2.mp3" },
+  { text: "Suddenly, the Harmony Guild, NYUAD's secret music agency, came to your dorm and recruited you as a Sound Detective. They assigned you a mission to restore the world's greatest songs.", image: "Media/scene3.png", narrator: "Media/narrator3.mp3" },
+  { text: "From now on, you need to identify the hidden instruments in distorted tracks. If you choose correct answers, harmony will be restored. If they choose wrong ones, silence will be deepened.", image: "Media/scene4.png", narrator: "Media/narrator4.mp3" },
   { text: "Choose a city to restore..." }
 ];
 
 let currentPage = 0;
+let narratorAudio = null; // Store narrator audio reference
 
 function renderStoryScreen() {
   const isFinalPage = currentPage === storyPages.length - 1;
   const currentStory = storyPages[currentPage];
   const storyText = typeof currentStory === 'string' ? currentStory : currentStory.text;
   const storyImage = typeof currentStory === 'object' && currentStory.image ? currentStory.image : null;
+  const narratorSrc = typeof currentStory === 'object' && currentStory.narrator ? currentStory.narrator : null;
+  
+  // Stop any playing audio (including ghost whispers) when entering story screen
+  stopAudio();
+  
+  // Stop any playing narrator audio when navigating
+  if (narratorAudio) {
+    narratorAudio.pause();
+    narratorAudio.currentTime = 0;
+    narratorAudio = null;
+  }
   
   const template = document.getElementById('story-screen-template');
   const clone = template.content.cloneNode(true);
@@ -437,18 +495,45 @@ function renderStoryScreen() {
   app.innerHTML = '';
   app.appendChild(clone);
   
+  // Play narrator audio for current page if available
+  if (narratorSrc) {
+    // Play narrator audio
+    narratorAudio = new Audio(narratorSrc);
+    narratorAudio.volume = 1.0; // Full volume for narrator
+    narratorAudio.play().catch(() => {
+      // Silent fail if audio can't play
+    });
+    
+    // Clear narrator reference when finished
+    narratorAudio.addEventListener('ended', () => {
+      narratorAudio = null;
+    });
+  }
+  
   if (!isFinalPage) {
+    // Helper function to stop narrator
+    const stopNarrator = () => {
+      if (narratorAudio) {
+        narratorAudio.pause();
+        narratorAudio.currentTime = 0;
+        narratorAudio = null;
+      }
+    };
+    
     document.getElementById('next-btn')?.addEventListener('click', () => {
+      stopNarrator();
       currentPage++;
       renderStoryScreen();
     });
     
     document.getElementById('prev-btn')?.addEventListener('click', () => {
+      stopNarrator();
       currentPage--;
       renderStoryScreen();
     });
     
     document.getElementById('restart-btn').addEventListener('click', () => {
+      stopNarrator();
       currentPage = 0;
       renderStoryScreen();
     });
@@ -459,6 +544,7 @@ function renderStoryScreen() {
 
 // City Selection
 function renderCitySelect() {
+  
   const citiesHtml = data.cities.map(city => {
     const restored = isCityRestored(city.id);
     return `
@@ -490,6 +576,8 @@ function renderCitySelect() {
   
   document.querySelectorAll('.city-card').forEach(card => {
     card.addEventListener('click', () => {
+      // Stop scary music box audio when user selects a city
+      stopAudio();
       const cityId = card.dataset.cityId;
       navigate(`/city/${cityId}`);
     });
@@ -497,6 +585,8 @@ function renderCitySelect() {
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
+        // Stop scary music box audio when user selects a city
+        stopAudio();
         const cityId = card.dataset.cityId;
         navigate(`/city/${cityId}`);
       }
@@ -506,6 +596,11 @@ function renderCitySelect() {
 
 // Quiz Screen
 function renderQuizScreen({ id: cityId }) {
+  // Stop scary music box audio when entering quiz screen
+  if (currentAudio && currentAudio.src.includes('scary-music-box')) {
+    stopAudio();
+  }
+  
   const city = data.cities.find(c => c.id === cityId);
   if (!city) {
     navigate('/story');
@@ -521,10 +616,14 @@ function renderQuizScreen({ id: cityId }) {
   renderQuestion(city);
 }
 
+let selectedOption = null;
+
 function renderQuestion(city) {
   const questionIndex = currentQuizState.currentQuestion;
   const question = city.questions[questionIndex];
   const progress = ((questionIndex) / city.questions.length) * 100;
+  
+  selectedOption = null; // Reset selection
   
   const template = document.getElementById('quiz-screen-template');
   const clone = template.content.cloneNode(true);
@@ -533,6 +632,7 @@ function renderQuestion(city) {
   const titleEl = clone.getElementById('quiz-title');
   const promptEl = clone.getElementById('quiz-prompt');
   const optionsEl = clone.getElementById('options');
+  const finalAnswerBtn = clone.getElementById('final-answer-btn');
   
   progressBar.style.width = `${progress}%`;
   titleEl.textContent = `Question ${questionIndex + 1} of ${city.questions.length}`;
@@ -544,26 +644,65 @@ function renderQuestion(city) {
     btn.dataset.correct = opt.correct;
     btn.dataset.index = i;
     btn.textContent = opt.label;
-    btn.addEventListener('click', () => handleAnswer(btn, city));
+    btn.addEventListener('click', () => {
+      selectOption(btn, city, question);
+    });
     optionsEl.appendChild(btn);
+  });
+  
+  finalAnswerBtn.addEventListener('click', () => {
+    if (selectedOption) {
+      handleFinalAnswer(selectedOption, city);
+    }
   });
   
   app.innerHTML = '';
   app.appendChild(clone);
 }
 
-function handleAnswer(btn, city) {
+function selectOption(btn, city, question) {
+  unlockAudio();
+  
+  // Remove previous selection
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.classList.remove('selected');
+  });
+  
+  // Select new option
+  btn.classList.add('selected');
+  selectedOption = btn;
+  
+  // Enable Final Answer button
+  const finalAnswerBtn = document.getElementById('final-answer-btn');
+  if (finalAnswerBtn) {
+    finalAnswerBtn.disabled = false;
+  }
+  
+  // Play sound for the selected option
+  // This will play when you add the audio source to question.clipSrc
+  if (question.clipSrc) {
+    playAudio(question.clipSrc, false).catch(() => {
+      // Silent fail if audio can't play
+    });
+  }
+}
+
+function handleFinalAnswer(btn, city) {
   unlockAudio();
   const isCorrect = btn.dataset.correct === 'true';
   const distortion = document.getElementById('distortion');
+  
+  // Disable all buttons
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  const finalAnswerBtn = document.getElementById('final-answer-btn');
+  if (finalAnswerBtn) {
+    finalAnswerBtn.disabled = true;
+  }
   
   if (isCorrect) {
     btn.classList.add('correct');
     showToast('You recovered an instrument!', 'success');
     currentQuizState.correctAnswers++;
-    
-    // Disable all buttons
-    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
     
     setTimeout(() => {
       currentQuizState.currentQuestion++;
@@ -584,6 +723,12 @@ function handleAnswer(btn, city) {
     setTimeout(() => {
       btn.classList.remove('incorrect');
       distortion.classList.remove('glitching');
+      // Re-enable buttons to allow retry
+      document.querySelectorAll('.option-btn').forEach(b => b.disabled = false);
+      if (finalAnswerBtn) {
+        finalAnswerBtn.disabled = false;
+      }
+      selectedOption = btn; // Keep selection
     }, 600);
   }
 }
@@ -608,6 +753,35 @@ function renderRestoreScreen({ id: cityId }) {
   
   screenEl.classList.add(city.id);
   titleEl.textContent = `${city.name} Restored!`;
+  
+  // Add YouTube video if available
+  const videoContainer = clone.getElementById('restore-video-container');
+  const popCityVideo = clone.getElementById('pop-city-video');
+  const classicalGardensVideo = clone.getElementById('classical-gardens-video');
+  const rockMountainVideo = clone.getElementById('rock-mountain-video');
+  
+  // Hide all embedded videos first
+  if (popCityVideo) {
+    popCityVideo.style.display = 'none';
+  }
+  if (classicalGardensVideo) {
+    classicalGardensVideo.style.display = 'none';
+  }
+  if (rockMountainVideo) {
+    rockMountainVideo.style.display = 'none';
+  }
+  
+  // Show video for the restored city
+  if (city.id === 'pop' && popCityVideo) {
+    // Show Pop City video (already has src in HTML)
+    popCityVideo.style.display = 'block';
+  } else if (city.id === 'classical' && classicalGardensVideo) {
+    // Show Classical Gardens video (already has src in HTML)
+    classicalGardensVideo.style.display = 'block';
+  } else if (city.id === 'rock' && rockMountainVideo) {
+    // Show Rock Mountain video (already has src in HTML)
+    rockMountainVideo.style.display = 'block';
+  }
   
   // Create confetti
   for (let i = 0; i < 30; i++) {
@@ -725,11 +899,13 @@ function renderCreatorsScreen() {
     
     const imageEl = document.createElement('div');
     imageEl.className = 'creator-image';
-    const imageIcon = document.createElement('p');
-    imageIcon.textContent = '♪';
-    imageIcon.style.fontSize = '3rem';
-    imageIcon.style.opacity = '0.3';
-    imageEl.appendChild(imageIcon);
+    const img = document.createElement('img');
+    img.src = creator.img;
+    img.alt = `${creator.name}'s profile picture`;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    imageEl.appendChild(img);
     
     const nameEl = document.createElement('h3');
     nameEl.className = 'creator-name';
@@ -769,8 +945,6 @@ registerRoute('/creators', renderCreatorsScreen);
 // Initialize router
 initRouter();
 
-// Stop audio when navigating away
-window.addEventListener('hashchange', () => {
-  stopAudio();
-});
+// Stop audio when navigating away (but preserve music box audio during story/city selection)
+// Note: Audio stopping is handled in individual render functions for better control
 
