@@ -676,17 +676,17 @@ function getInstrumentFiles(instrumentType) {
     'piano': [
       'Piano/cs_piano.mp3',
       'Piano/let it go piano.mp3',
-      'Piano/yellow piano.WAV'
+      'Piano/yellow piano.mp3'
     ],
     'voice': [
-      'Voice/cs_voice.WAV',
-      'Voice/let it go voice.WAV',
-      'Voice/yellow voice.WAV'
+      'Voice/cs_voice.mp3',
+      'Voice/let it go voice.mp3',
+      'Voice/yellow voice.mp3'
     ],
     'guitar': [
-      'Guitar/cs_guitar.WAV',
-      'Guitar/let it go violin.WAV',
-      'Guitar/yellow guitar.WAV'
+      'Guitar/cs_guitar.mp3',
+      'Guitar/let it go violin.mp3',
+      'Guitar/yellow violin.mp3'
     ]
   };
   
@@ -878,7 +878,7 @@ function renderRestoreScreen({ id: cityId }) {
   } else {
     const btn = document.createElement('button');
     btn.className = 'btn btn-primary';
-    btn.textContent = 'Celebrate Victory';
+    btn.textContent = 'Celebrate your wins!';
     btn.onclick = () => { window.location.hash = '/final'; };
     actionsEl.appendChild(btn);
   }
